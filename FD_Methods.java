@@ -96,6 +96,13 @@ class FixedDeposit {
     }
 
     // method to calculate maturity amount
+    public float calculateMaturityAmount(int months) {
+        float maturityAmount = fdAmount;
+        float yr = months / 12;
+        maturityAmount += maturityAmount * yr * this.rateOfInterest / 100;
+        return maturityAmount;
+    }
+
     public float calculateMaturityAmount() {
         float maturityAmount = fdAmount;
         float yr = this.term / 12;
@@ -243,14 +250,14 @@ public class FD_Methods {
         int yr = Integer.parseInt(sc.next());
         if (yr < obj.getTerm()) {
             System.out.printf("Maturity amount earned = "
-                    + (float) Math.abs(obj.getFdAmount() - obj.calculateMaturityAmount()) + "\nInterest Rate = "
+                    + (float) Math.abs(obj.getFdAmount() - obj.calculateMaturityAmount(yr)) + "\nInterest Rate = "
                     + obj.getRateOfInterest());
             System.out.println(
                     "\nDo you want to force close this account ?\nInterest rate will change accordingly with months passed !!(press y/n):");
             if (sc.next().charAt(0) == 'y') {
                 obj.setTerm(yr);
                 obj.setRateOfInterest(yr);
-                obj.setFdAmount(obj.calculateMaturityAmount());
+                obj.setFdAmount(obj.calculateMaturityAmount(yr));
                 saving.set(ind, obj);
                 System.out.println("Amount withdrawn = " + obj.getFdAmount() + "\nFD Account closed!!!");
                 saving.remove(obj);
@@ -265,7 +272,7 @@ public class FD_Methods {
                         + "months to attain maturity");
                 System.out.println("Do you want to close permaturely?");
                 if (sc.next().charAt(0) == 'y') {
-                    obj.setFdAmount(obj.calculateMaturityAmount());
+                    obj.setFdAmount(obj.calculateMaturityAmount(yr));
                     System.out.println("Amount withdrawn = " + obj.getFdAmount());
                     saving.remove(ind);
                     System.out.println("Your FD account got removed from this bank!!!");
@@ -284,7 +291,7 @@ public class FD_Methods {
                     saving.set(ind, obj);
 
                 } else {
-                    obj.setFdAmount(obj.calculateMaturityAmount());
+                    obj.setFdAmount(obj.calculateMaturityAmount(yr));
                     System.out.println("Amount withdrawn = " + obj.getFdAmount());
                     saving.remove(ind);
                     System.out.println("Your FD account got removed from this bank!!!");
@@ -307,7 +314,7 @@ public class FD_Methods {
             if (yr < obj.getTerm()) {
                 System.out.println(
                         "Maturity amount earned = "
-                                + (float) Math.abs(obj.getFdAmount() - obj.calculateMaturityAmount())
+                                + (float) Math.abs(obj.getFdAmount() - obj.calculateMaturityAmount(yr))
                                 + "\nInterest Rate = "
                                 + obj.getRateOfInterest() + "%");
             } else if (yr >= obj.getTerm() && obj.getAuto()) {
